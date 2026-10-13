@@ -9,19 +9,19 @@ The following model is developed in view of the IFRS 9 standards and aim to show
 
 $$ \text{PV}_{ECL_{i,n}} = \frac{\text{PD}_{i,n} \times \text{LGD}_{i,n} \times \text{EAD}_{i,n}}{(1+r)^{n}} $$
 
-$ where : $
+$where :$
 
-$ \text{i refers to the i}^{th} \text{borrower}  $
+$\text{i refers to the i}^{th} \text{borrower}$
 
-$ \text{n refers to the n}^{th} \text{period}  $
+$\text{n refers to the n}^{th} \text{period}$
 
-$ \text{r is the interest rate} $
+$\text{r is the interest rate}$
 
-$ \text{PD}_{i,n} \text{ = Point in time probability of default of the i}^{th} \text{ borrower at n}^{th} \text{ period}  $
+$\text{PD}_{i,n} \text{ = Point in time probability of default of the i}^{th} \text{ borrower at n}^{th} \text{ period}$
 
-$ \text{LGD}_{i,n} \text{ = Point in time loss given default of the i}^{th} \text{ borrower at n}^{th} \text{ period}  $
+$\text{LGD}_{i,n} \text{ = Point in time loss given default of the i}^{th} \text{ borrower at n}^{th} \text{ period}$
 
-$ \text{EAD}_{i,n} \text{ = Exposure at default of the i}^{th} \text{ borrower at n}^{th} \text{ period}  $
+$\text{EAD}_{i,n} \text{ = Exposure at default of the i}^{th} \text{ borrower at n}^{th} \text{ period}$
 
 The model aims to highlight how the three risk parameters are computed and then converted to a point-in-time estimate to compute the ECL. Furthermore, the model uses the concept of Markov chains to demonstrate how Days past due (DPD) and credit ratings can be estimated. Furthermore, the model also implements the probation period, charge-off of accounts but does not model curing of accounts (See Section II : Model Assumptions point 7). The model has three scenarios (Base, Optimistic and Pessimistic), but the code has been made flexible to extend to $\text{n}$ scenarios, with slight modifications (See Section V : Model limitations and future enhancements) to the code in certain areas. All the necessary variables are declared at the start of the code to make it more accessible, efficient, and easier to update the code later.
 
@@ -149,9 +149,9 @@ Modelling of charge-off and curing of accounts is out of the scope of the curren
 
 $$\text{Total Quarters} = (\text{End Year} - \text{Start Year}) \times 4 + (\text{End Quarter} - \text{Start Quarter})$$
 
-$ where $ :
+$where$ :
 
- $ \text{End Year} $ = The maturity date of the loan (amortising / bullet) or the end of the reporting period (which is Q4 2025), whichever is earlier.
+ $\text{End Year}$ = The maturity date of the loan (amortising / bullet) or the end of the reporting period (which is Q4 2025), whichever is earlier.
  
  $\text{Start Year}$= The Sanction Date of the loan or the start of the reporting period (which is Q1 2023), whichever is later.
 
@@ -159,7 +159,7 @@ $ where $ :
 
 $$\text{MOB} = [(\text{Current Year} - \text{Origination Year}) \times 12] + (\text{Current Month} - \text{Origination Month})$$
 
-$ where $ :
+$where$ :
 
 $\text{Current year}$ = The reporting year.
 
@@ -183,7 +183,7 @@ The following section explains how different parts of the model were developed, 
   
   + **Credit Rating Transition Matrix Adjustment** :
 
-    The raw rating transition matrix had the size of $ 7 \times 9 $, with $7$ initial ratings $(\text{AAA to CCC})$ and $9$ destination states $(\text{AAA to NR, where NR refers to Not Rated})$. To ensure structural consistency, the matrix was converted to an $8\times 8 $ square transition matrix through a three- step process :
+    The raw rating transition matrix had the size of $7 \times 9$, with $7$ initial ratings $(\text{AAA to CCC})$ and $9$ destination states $(\text{AAA to NR, where NR refers to Not Rated})$. To ensure structural consistency, the matrix was converted to an $8\times 8$ square transition matrix through a three- step process :
     + **State Space expansion** :  A default category of $D$ was added as an active initial state (row) and providing some initial values to it.
     + **Removal of NR rating and reallocation** : the $NR$ rating column values were distributed among the remaining active states to preserve row stochastic properties $\sum P_{ij} = 1\$ and maintain the ordinal risk hierarchy.
       
@@ -214,7 +214,7 @@ The following section explains how different parts of the model were developed, 
 | CCC | 0.0068 | 0.0113 | 0.0150 | 0.0284 | 0.0579 | 0.2278 | 0.5863 | <b> 0.0666 </b> |
 | D   | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0543 | 0.0761 | 0.3804 |     0.4891      |
 
-<div align = "center" >  <i> In the above table, the highlighted cells in column $D$ represents </i> </div>
+<div align = "center" >  <i> In the above table, the highlighted cells in column D represents </i> </div>
 <div align = "center" >  <i> the 1-year PD values that were computed using the Pluto-Tasche method. </i>  </div>
 <br> <br>
 
@@ -238,10 +238,10 @@ The following section explains how different parts of the model were developed, 
     + **No structural adjustments** : Unlike the rating transition matrix, the DPD transition matrix did not require any $NR$ reallocation or row expansion.
     + **Time horizon** : The raw DPD transition matrix was observed at a quarterly frequency; thus, it did not need any scale transformation.
   
-  The base transition matrix for DPD bucket is aligned with industry- standards stylized facts. The base rating and DPD transition matrix should be considered as a Through-the-cycle (TTC) transition matrix, which is then converted to Point-in-time Transition matrix. The rating transition matrix was a yearly transition matrix and was converted to quarterly transition matrix and the raw DPD transition matrix is a quarterly transition matrix and thus it does not require any conversion. Each of the transition matrix is a square matrix ($ \text{Rating matrix} : 8 \times 8 \text{ and DPD matrix }: 4 \times 4)$.
+  The base transition matrix for DPD bucket is aligned with industry- standards stylized facts. The base rating and DPD transition matrix should be considered as a Through-the-cycle (TTC) transition matrix, which is then converted to Point-in-time Transition matrix. The rating transition matrix was a yearly transition matrix and was converted to quarterly transition matrix and the raw DPD transition matrix is a quarterly transition matrix and thus it does not require any conversion. Each of the transition matrix is a square matrix ($\text{Rating matrix} : 8 \times 8 \text{ and DPD matrix }: 4 \times 4)$.
 
   * **Optimisation of transition matrices**:
-    A function was created, called the `matrix_optimisation`, to optimise any $ n \times n$ transition matrix. The optimisation algorithm uses the CVXPY library. The function uses the CLARABEL solver provided within the CVXPY library to solve convex optimisation problems. Both the transition matrices were optimised to meet the following constraints:
+    A function was created, called the `matrix_optimisation`, to optimise any $n \times n$ transition matrix. The optimisation algorithm uses the CVXPY library. The function uses the CLARABEL solver provided within the CVXPY library to solve convex optimisation problems. Both the transition matrices were optimised to meet the following constraints:
       
     1. **Monotonicity** : Transition probability in the diagonal cells must decrease as we move towards a worse rating / DPD.
       
@@ -267,21 +267,23 @@ The following section explains how different parts of the model were developed, 
 
      The PIT transition matrix (PIT-TM) is computed as follows:
 
-      $$ \text{PIT-TM}_{i} = \Phi\left(\frac{UB- \sqrt{\rho}*\text{Z}_{i}}{\sqrt{1-\rho}})\right) - \Phi\left(\frac{LB- \sqrt{\rho}\times{Z}_{i}}{\sqrt{1-\rho}}\right) $$
 
-    $ where: $
+$$ \text{PIT-TM}_{i} = \Phi\left(\frac{\text{UB} - \sqrt{\rho}\times Z_{i}}{\sqrt{1-\rho}}\right) - \Phi\left(\frac{\text{LB} - \sqrt{\rho}\times Z_{i}}{\sqrt{1-\rho}}\right) $$
+    
 
-    $\text{i} = \text{The i}^{th} period $
+$where:$
 
-    $ \Phi  = \text{Standard normal distribution function} $
+$\text{i} = \text{The i}^{th} period$
 
-    $ UB =  \text{Upper bound of the transition matrix} $
+$\Phi  = \text{Standard normal distribution function}$
 
-    $ LB = \text{Lower bound of the transition matrix} $
+$UB =  \text{Upper bound of the transition matrix}$
 
-    $ Z_{i} = \text{Forecasted value macroeconomic index at period i} $
+$LB = \text{Lower bound of the transition matrix}$
 
-    $ \rho = \text{Asset correlation}$
+$Z_{i} = \text{Forecasted value macroeconomic index at period i}$
+
+$\rho = \text{Asset correlation}$
 
 + **Joint Dependency framework via Gaussian Copula**:
 
@@ -290,7 +292,7 @@ To explicitly account for the systemic dependency between delinquency progressio
     
    1. **Marginal Distributions generation** :
         
-      The individual random probabilities for DPD and rating migrations are drawn from an independent continuous uniform distribution, $ U(0,1) $. Note that the transition matrix for DPD and ratings are structurally ordered from best to worst (left to right).
+      The individual random probabilities for DPD and rating migrations are drawn from an independent continuous uniform distribution, $U(0,1)$. Note that the transition matrix for DPD and ratings are structurally ordered from best to worst (left to right).
 
    2. **Correlation direction** :
         
@@ -299,12 +301,12 @@ To explicitly account for the systemic dependency between delinquency progressio
 
    3. **Scalability via Cholesky Decomposition** :
 
-      To implement this dependence structure, the Gaussian copula function is parameterised utilizing a Cholesky decomposition. Integrating the Cholesky decomposition ensures structural scalability; it transforms the algorithm into an adaptable multivariate process, allowing additional risk variables ( $n$ - variables, n $\ge2$ ) to be dynamically added to the joint dependence architecture in future without rebuilding the underlying engine. For a two variable coupling, the Cholesky decomposition framework essentially becomes a simple equation where the two individual probability distribution is first converted to its inverse of the standard normal cumulative function : $Z_{i} = \Phi^{-1}U_{i} $, where $ i $ refers to the probability values of DPD and ratings. The $Z_{i}$ are then coupled using the following formula:
+      To implement this dependence structure, the Gaussian copula function is parameterised utilizing a Cholesky decomposition. Integrating the Cholesky decomposition ensures structural scalability; it transforms the algorithm into an adaptable multivariate process, allowing additional risk variables ( $n$ - variables, n $\ge2$ ) to be dynamically added to the joint dependence architecture in future without rebuilding the underlying engine. For a two variable coupling, the Cholesky decomposition framework essentially becomes a simple equation where the two individual probability distribution is first converted to its inverse of the standard normal cumulative function : $Z_{i} = \Phi^{-1}U_{i}$, where $i$ refers to the probability values of DPD and ratings. The $Z_{i}$ are then coupled using the following formula:
 
       $$Z_{2*} = \rho \times Z_{1} + \sqrt{1-\rho^2}\times Z_{2}$$
 
 
-      After the transformation, $Z_{2*}$ and $ Z_{1}$ would be converted back to probability by taking standard normal cumulative distribution function $U_{i} = \Phi( Z_{i})$. The returned values would be the correlated values, which we would use against our transition matrices to estimate the values of DPD and ratings. 
+      After the transformation, $Z_{2*}$ and $Z_{1}$ would be converted back to probability by taking standard normal cumulative distribution function $U_{i} = \Phi( Z_{i})$. The returned values would be the correlated values, which we would use against our transition matrices to estimate the values of DPD and ratings. 
 
    4. **Dependency Validation** :
 
@@ -395,23 +397,23 @@ A Vector Error Correction, VECM(1), model was fitted for forecasting purposes.
 
 Before the VECM(1) model was fitted, Default rates were first converted to a macroeconomic index as per the following formula :
 
-$$ \text{Z}_{i} = \frac{(\Phi^{-1}(TTC_{DR}) - \Phi^{-1}PIT_{DR_{i}} * \sqrt{1-\rho})}{\sqrt{\rho}}$$
+$$\text{Z}_{i} = \frac{(\Phi^{-1}(TTC_{DR}) - \Phi^{-1}PIT_{DR_{i}} * \sqrt{1-\rho})}{\sqrt{\rho}}$$
 
-$ where : $
+$where :$
 
-$ i = i^{th} observation $
+$i = i^{th} observation$
 
-$ \Phi = \text{Standard normal distribution function} $
+$\Phi = \text{Standard normal distribution function}$
 
-$ \Phi^{-1} = \text{Inverse of the Standard normal distribution function} $
+$\Phi^{-1} = \text{Inverse of the Standard normal distribution function}$
 
-$ TTC_{DR} =  \text{Average of the historical point-in-time default rates} $
+$TTC_{DR} =  \text{Average of the historical point-in-time default rates}$
 
-$ \Phi^{-1}TTC_{DR} = \text{Average of the } \Phi^{-1}(PIT_{DR_{i}})\times \sqrt{1- \rho} $
+$\Phi^{-1}TTC_{DR} = \text{Average of the } \Phi^{-1}(PIT_{DR_{i}})\times \sqrt{1- \rho}$
 
-$ \rho = \frac{\sigma^2_{\Phi^{-1}PIT_{DR}}}{1+\sigma^2_{\Phi^{-1}PIT_{DR}}} $
+$\rho = \frac{\sigma^2_{\Phi^{-1}PIT_{DR}}}{1+\sigma^2_{\Phi^{-1}PIT_{DR}}}$
 
-$ PIT_{DR} =  \text{Historical default Rates} $
+$PIT_{DR} =  \text{Historical default Rates}$
 
 
 Default rates were taken as a proxy for the estimate of "Z", which refers to the macroeconomic index. A high Z means that the economy is doing well (low default rate period) and a low/ negative value of Z refers to a period of stress where default rates would be higher. Here, the default rates within a bank technically will be the historical default rates of the bank, which would then be used to estimate the value of Z but given that data is not available, the FRED's data is being used as a proxy. 
@@ -456,7 +458,7 @@ VECM model was only tested with 1 lag to keep the model simple and understandabl
 
 + **Illustrative exercise for forecasting of a macroeconomic variable** :
 
-  For a better understanding of how simulations can be generated for a macroeconomic variable using the error-propagation mechanism, a simplified univariate case was tested: an AR(1) model fit on the HPI dataset, simulated $ 10,000 $ times from a common base forecast. The resulting distribution converges to the theoretical asymptotic normal distribution implied by the AR(1)'s own error structure.
+  For a better understanding of how simulations can be generated for a macroeconomic variable using the error-propagation mechanism, a simplified univariate case was tested: an AR(1) model fit on the HPI dataset, simulated $10,000$ times from a common base forecast. The resulting distribution converges to the theoretical asymptotic normal distribution implied by the AR(1)'s own error structure.
       
 |                       HPI : Illustrative Example                           |
 |:--------------------------------------------------------------------------:|
@@ -469,7 +471,7 @@ VECM model was only tested with 1 lag to keep the model simple and understandabl
  
 The computation of Probability of default (PD) under the model is done using two models : Pluto Tasche model and the Hazard Rate model.
 
-$ \text{Pluto-Tasche method} $
+$\text{Pluto-Tasche method}$
 
 The Pluto Tasche model is used to compute the 12-month PD for each rating grade - AAA, AA, A, BBB, BB, B, CCC - under the assumption that there are 0 defaults in the portfolio. This model was chosen because :
         
@@ -478,7 +480,7 @@ The Pluto Tasche model is used to compute the 12-month PD for each rating grade 
 
 The PD's for each rating is first computed under the assumption of no correlation between borrowers, once that PD is computed, the model then computes the PD assuming correlation between borrowers with an asset correlation of 12% and a confidence interval of 75%, as prescribed by Pluto and Tasche (2005).
 
-$ \text{Hazard rate model} $
+$\text{Hazard rate model}$
 
 Once the 12 month PD's for each rating grade is computed, the lifetime PD is computed using the Hazard rate model, where the hazard rate, $\lambda$, is first extrapolated from the 12 month PD and then using the value of $\lambda$, lifetime PD is computed, which is then further converted to Point-in-time (PIT) using the macroeconomic forecast value at each quarter and a fixed asset correlation of 12% using the Vasicek model. 
 
@@ -501,23 +503,24 @@ ${r =}$ credit rating for which lambda is being computed.
  ${r = }$ credit rating grade
 
 + The PD's are assumed to be representing a <b> Master Rating Scale </b> given that the model has different sectors (Retail, Corporate, Commercial and SME).
+
 The PI PD's are then computed as :
 
-$$ \text{PIT-PD}_{i} = \Phi\left(\frac{\Phi^{-1}PD_{i} - \sqrt{\rho}\times Z_{t}}{\sqrt{1-\rho}}\right)$$
+$$ \text{PIT-PD}_{i} = \Phi\left(\frac{\Phi^{-1}PD_{i} - \sqrt{\rho}\times Z_{t}}{\sqrt{1-\rho}}\right) $$
 
-$ where : $
+$where :$
 
-$ \Phi = \text{ Standard normal distriibution function} $
+$\Phi = \text{ Standard normal distriibution function}$
 
-$ i = \text{i}^{th} \text{ rating grade } $
+$i = \text{i}^{th} \text{ rating grade }$
 
-$ \Phi^{-1} = \text{Inverse of the Standard normal distriibution function} $
+$\Phi^{-1} = \text{Inverse of the Standard normal distriibution function}$
 
-$ PD_{i} = \text{Probability of default ( 12 month or lifetime) for the } \text{i}^{th} \text{ rating grade}$
+$PD_{i} = \text{Probability of default ( 12 month or lifetime) for the } \text{i}^{th} \text{ rating grade}$
 
-$ \rho = \text{asset correlation} $
+$\rho = \text{asset correlation}$
 
-$ Z_{t} = \text{ Macroeconomic index forecasted value at period t} $
+$Z_{t} = \text{ Macroeconomic index forecasted value at period t}$
 
 | PD Pluto Tasche | Hazard Rate PD |
 | :---: | :---: |
@@ -551,14 +554,14 @@ At each reporting period, outstanding balance is being computed for amortising l
  
  <b> Note : </b> When calculating the outstanding balance when the account is in 90+ DPD, it is assumed that the account becomes 90+ in that quarter and what the DPD was in previous quarter is not taken into consideration due to the following reason: 
  
-  - When an account transitions into 90+ DPD for the first time i.e., the prior quarter's bucket was Current, 30-59 DPD, or 60-89 DPD, the exact month within that quarter the account crossed the 90-day threshold cannot be recovered from quarterly-level data alone. Rather than inferring this from the prior quarter's bucket (which would require monthly-level assumptions beyond what the data supports), the model assumes the standard progression: 30+ DPD in month 1, 60+ DPD in month 2, 90+ DPD in month 3 (the reporting month) — i.e., a fixed 3-month missed-payment count for the first occurrence, regardless of what the immediately preceding bucket was. This is a deliberate simplification to avoid introducing monthly-level assumptions the data cannot support currently. For example, if in quarter $ i -1 $, the DPD bucket was either 30-59 DPD or 60-89 DPD and the quarter $ i $ DPD is 90+ DPD, under a monthly forecasting, we could see that the 90+ DPD could reach in either two or one months, respectively and the current quarter's 90+ DPD account may in reality have accumulated more than the assumed 90 days delinquent, depending on where within the prior bucket's day-range the account actually sat.
+  - When an account transitions into 90+ DPD for the first time i.e., the prior quarter's bucket was Current, 30-59 DPD, or 60-89 DPD, the exact month within that quarter the account crossed the 90-day threshold cannot be recovered from quarterly-level data alone. Rather than inferring this from the prior quarter's bucket (which would require monthly-level assumptions beyond what the data supports), the model assumes the standard progression: 30+ DPD in month 1, 60+ DPD in month 2, 90+ DPD in month 3 (the reporting month) — i.e., a fixed 3-month missed-payment count for the first occurrence, regardless of what the immediately preceding bucket was. This is a deliberate simplification to avoid introducing monthly-level assumptions the data cannot support currently. For example, if in quarter $i -1$, the DPD bucket was either 30-59 DPD or 60-89 DPD and the quarter $i$ DPD is 90+ DPD, under a monthly forecasting, we could see that the 90+ DPD could reach in either two or one months, respectively and the current quarter's 90+ DPD account may in reality have accumulated more than the assumed 90 days delinquent, depending on where within the prior bucket's day-range the account actually sat.
   - This simplification understates the potential missed- accrued  outstanding balance by at least 30 days (up to 59 days) if the previous quarter was 30-59 DPD, or at least 60 days (up to 89 days) if the previous quarter was 60-89 DPD. 
     
 For accounts that remain 90+ DPD in the following quarter and beyond, this fixed 3-month assumption no longer applies — the model instead uses the consecutive 90+ streak counter to extend the lookback proportionally (see "Further Information for Amortising/ Bullet Loans" below), since by that point the account has demonstrably been delinquent for longer than one quarter and the streak count itself is known with certainty.
 
 ##### B. Bullet Loans : 
 
-+ The outstanding balance for Bullet loans is set as the Sanction Amount as it is assumed that the borrower will continue to pay the interest due each month. The interest amount is computed as a simple interest on the sanction amount under the normal course of action, and if the borrower is marked as a defaulter, compounding interest would be computed and will be reflected in a separate column titled EAD_{s}, where $ s $ refers to the scenarios , which will be used in the computation of Expected Credit Loss (ECL) for the borrower. After the credit ratings and DPD buckets of the borrower are estimated, EAD is calculated based on which bucket the loan is in each quarter : 
++ The outstanding balance for Bullet loans is set as the Sanction Amount as it is assumed that the borrower will continue to pay the interest due each month. The interest amount is computed as a simple interest on the sanction amount under the normal course of action, and if the borrower is marked as a defaulter, compounding interest would be computed and will be reflected in a separate column titled EAD_{s}, where $s$ refers to the scenarios , which will be used in the computation of Expected Credit Loss (ECL) for the borrower. After the credit ratings and DPD buckets of the borrower are estimated, EAD is calculated based on which bucket the loan is in each quarter : 
 
  - If DPD is "Current" - EAD will equal the Sanction amount.
    
@@ -572,8 +575,8 @@ For accounts that remain 90+ DPD in the following quarter and beyond, this fixed
 
 ##### Further information for Amortising/Bullet Loans — Delinquency-Adjusted Outstanding Balance
 
-DPD bucket is treated as a lagged indicator of missed instalments: because DPD is evaluated on a monthly reporting period, an unpaid instalment due mid-month cannot cross a 30-day threshold before month-end, so bucket transitions are observed with a one-month lag relative to the date of the first missed payment. Consequently, for a loan in DPD bucket implying $k$ consecutive missed instalments as of month $MOB$, the last successfully paid instalment corresponds to month $ MOB − k − 1 $. EAD is computed by $(i)$ computing the outstanding principal as of that anchor month via the standard annuity remaining-balance formula, and $ (ii) $ adding the scheduled interest (IPMT) components of the k subsequently missed instalments, each computed off the original amortization schedule at the corresponding payment index. 
-Bucket-to-k_month mapping: $ Current → 0, 30-59 DPD → 1, 60-89 DPD → 2, 90+ DPD → 3 × \text{(consecutive quarterly 90+ streak count)} $, reflecting quarterly reporting granularity. The 90+ DPD streak-based $ k $ is capped at a segment-specific maximum (default: 2 quarters / 6 months), beyond which EAD is held flat and the exposure is flagged for charge-off treatment, consistent with regulatory retail charge-off conventions.
+DPD bucket is treated as a lagged indicator of missed instalments: because DPD is evaluated on a monthly reporting period, an unpaid instalment due mid-month cannot cross a 30-day threshold before month-end, so bucket transitions are observed with a one-month lag relative to the date of the first missed payment. Consequently, for a loan in DPD bucket implying $k$ consecutive missed instalments as of month $MOB$, the last successfully paid instalment corresponds to month $MOB − k − 1$. EAD is computed by $(i)$ computing the outstanding principal as of that anchor month via the standard annuity remaining-balance formula, and $(ii)$ adding the scheduled interest (IPMT) components of the k subsequently missed instalments, each computed off the original amortization schedule at the corresponding payment index. 
+Bucket-to-k_month mapping: $Current → 0, 30-59 DPD → 1, 60-89 DPD → 2, 90+ DPD → 3 × \text{(consecutive quarterly 90+ streak count)}$, reflecting quarterly reporting granularity. The 90+ DPD streak-based $k$ is capped at a segment-specific maximum (default: 2 quarters / 6 months), beyond which EAD is held flat and the exposure is flagged for charge-off treatment, consistent with regulatory retail charge-off conventions.
 
 ##### C. Revolving Loans : 
 
@@ -601,7 +604,7 @@ $${EAD_{t}} = \text{Drawn Balance} + (\text{CCF} \times \text{(Sanction Amount -
 
 ##### Drawn Balance Evolution Between Quarters: 
 
-For revolving loans, the drawn balance at each quarter is not tracked at a monthly level, and quarter-over-quarter changes in `Outstanding_Balance` is not reconciled against actual repayment or drawdown activity. Instead, it is simply assumed that whatever balance is observed in the current quarter reflects a fresh drawdown by the borrower i.e., any prior balance is assumed to have been repaid in full before the new balance shown was drawn. For example, if a borrower shows a drawn balance of 20,000 in quarter $ i−1 $ and 25,000 in quarter $ i $ (against a sanction/limit of 30,000), the model assumes the 20,000 was repaid in full and a new 25,000 was subsequently drawn — not that 5,000 in additional credit was drawn on top of an unpaid 20,000.
+For revolving loans, the drawn balance at each quarter is not tracked at a monthly level, and quarter-over-quarter changes in `Outstanding_Balance` is not reconciled against actual repayment or drawdown activity. Instead, it is simply assumed that whatever balance is observed in the current quarter reflects a fresh drawdown by the borrower i.e., any prior balance is assumed to have been repaid in full before the new balance shown was drawn. For example, if a borrower shows a drawn balance of 20,000 in quarter $i−1$ and 25,000 in quarter $i$ (against a sanction/limit of 30,000), the model assumes the 20,000 was repaid in full and a new 25,000 was subsequently drawn — not that 5,000 in additional credit was drawn on top of an unpaid 20,000.
 
 This assumption applies only when the account is <b> <i> not in 90+ DPD </i> </b>. For 30-59 DPD and 60-89 DPD, the current row's `Outstanding_Balance` is used as-is (per the EAD rules above), since the exact month within the quarter that the account entered delinquency cannot be inferred from quarterly data, consistent with the same limitation already noted for amortising/bullet loans. For 90+ DPD, the balance is instead anchored to the value from $n$ quarters prior (per the counter-based lookback), floored at the borrower's first reported quarter where insufficient history exists, to avoid introducing additional randomness from re-sampling a new balance during an active default episode.
 
@@ -639,7 +642,7 @@ For charge off loans, once an account has been flagged to be sent to charge off 
 
 ##### Markov Chain Simulation Mechanics
 
-Both rating and DPD are modelled as discrete-time, discrete-state Markov chains, where the state at quarter $ t $ depends only on the state at $ t-1 $ and the applicable transition matrix (TTC for first observation, PIT for the reporting period). The rating chain includes an absorbing-with-reflection default state: once a rating of $D$ is reached, the chain is held at $D$ for a fixed probation window (parametrized, default 2 quarters) rather than transitioning freely, after which it is re-drawn — with the constraint that re-entry cannot land directly in an investment-grade state for rating, and the redraw is repeated (a rejection-sampling loop) until a valid $\text{non -} D  \text{ rating}$ state is returned given the probation period has ended. This path-dependency is what necessitates simulating the full chronological sequence per loan rather than sampling terminal states independently — a defaulted-then-cured loan's subsequent risk parameters depend on when and how it cured, not just its current label.
+Both rating and DPD are modelled as discrete-time, discrete-state Markov chains, where the state at quarter $t$ depends only on the state at $t-1$ and the applicable transition matrix (TTC for first observation, PIT for the reporting period). The rating chain includes an absorbing-with-reflection default state: once a rating of $D$ is reached, the chain is held at $D$ for a fixed probation window (parametrized, default 2 quarters) rather than transitioning freely, after which it is re-drawn — with the constraint that re-entry cannot land directly in an investment-grade state for rating, and the redraw is repeated (a rejection-sampling loop) until a valid $\text{non -} D  \text{ rating}$ state is returned given the probation period has ended. This path-dependency is what necessitates simulating the full chronological sequence per loan rather than sampling terminal states independently — a defaulted-then-cured loan's subsequent risk parameters depend on when and how it cured, not just its current label.
 
 Loans originated before the reporting window are simulated through a lookback phase (sanction date → first reporting date) using the same TTC-chain mechanics, and the terminal state (rating, DPD, and consecutive-90+ streak count) is carried forward as the initial condition for the reporting-period simulation — ensuring loans with pre-existing delinquency are not treated as active at the start of the reporting window.
 
@@ -728,11 +731,11 @@ The code was executed for 800 simulations, and the results were as follows :
 
 The horizontal lines represent the percentile values as follows :
 
-   a. Red dotted line represents the $ 99.9^{\text{th}} $ percentile value.
+   a. Red dotted line represents the $99.9^{\text{th}}$ percentile value.
    
-   b. Black dotted line represents the $ 95^{\text{th}} $ percentile value.
+   b. Black dotted line represents the $95^{\text{th}}$ percentile value.
    
-   c. Blue dotted line represents the $ 2.5^{\text{th}} $ percentile value.
+   c. Blue dotted line represents the $2.5^{\text{th}}$ percentile value.
 
 |                Monte Carlo Simulation : Distribution Plots          |
 |:-------------------------------------------------------------------:|
@@ -801,7 +804,7 @@ The following shows the results of a particular iteration. **Please note that th
 
 + **The use of Gaussian Copula** :
 
-    + The correlation parameter, $ \rho $, is set as +0.8 within the Gaussian copula framework is a non-calibrated baseline derived via judgment. While the positive vector direction is theoretically sound given the uniform best-to-worst alignment of the underlying transition matrices, the static parameter magnitude has not been fitted to historical empirical co-movements. This introduces parameter risk, as the assumed value may over- or under-state the true operational coupling between DPD shocks and credit rating downgrades during volatile market periods.
+    + The correlation parameter, $\rho$, is set as +0.8 within the Gaussian copula framework is a non-calibrated baseline derived via judgment. While the positive vector direction is theoretically sound given the uniform best-to-worst alignment of the underlying transition matrices, the static parameter magnitude has not been fitted to historical empirical co-movements. This introduces parameter risk, as the assumed value may over- or under-state the true operational coupling between DPD shocks and credit rating downgrades during volatile market periods.
  
     + **Specification Risk and Tail Independence** : The choice of a Gaussian copula introduces material specification risk due to its mathematical property of asymptotic tail independence. The model inherently fails to capture "tail-dependence", which means that it structurally underestimates the probability of two severe risk events occurring simultaneously. To mitigate this constraint, obvious methodological extensions include transitioning the engine to a student-t copula (to accommodate symmetric fat tails) or a Gumbel/Clayton framework to capture asymmetric tail stress.
 
@@ -810,7 +813,7 @@ Furthermore, not a limitation per se, but something to be careful about is that 
 
 + One enhancement that was planned was to simulate macroeconomic scenarios within the `ECL_sim` function as well, where the macroeconomic simulation would be a proportion of the number of iterations. But the methodology was subsequently dropped for the following reasons :
 
-  i. Partitioning $N$ total iterations across $M$ distinct macro draws means only the iterations sharing the same macro draw are directly comparable to one another effectively fragmenting a 10,000-iteration run into $M$ independent sub-samples of size $N/ M$ each, rather than one fully comparable $10,000$-draw distribution. Achieving a fully comparable $10,000$-iteration sample under $M$ macro draws would require $10,000 \times M $ total iterations, which is computationally prohibitive at scale. 
+  i. Partitioning $N$ total iterations across $M$ distinct macro draws means only the iterations sharing the same macro draw are directly comparable to one another effectively fragmenting a 10,000-iteration run into $M$ independent sub-samples of size $N/ M$ each, rather than one fully comparable $10,000$-draw distribution. Achieving a fully comparable $10,000$-iteration sample under $M$ macro draws would require $10,000 \times M$ total iterations, which is computationally prohibitive at scale. 
 
   ii. Generating a new simulation of the macroeconomic index would require us to re-compute the  PIT-transition matrices $M$ times and this would scale as we increase the number of scenarios and the reporting period.
 
