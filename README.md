@@ -760,7 +760,7 @@ The following shows the results of a particular iteration. **Please note that th
 
 |        Rating Migration                                |
 | :-----------------------------------------------------:|
-| <img src="./3_Rating_Migration_Plot.png" width = "700">| 
+| <img src="./3_Rating Migration_Plot.png" width = "700">| 
 
 
 |          Stage Migration                                       |
